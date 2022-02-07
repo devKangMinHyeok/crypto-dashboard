@@ -13,9 +13,14 @@ function Hello() {
   );
 }
 
+function Title() {
+  return <div>Title</div>;
+}
+
 function App() {
   return (
     <>
+      <Title />
       <Hello />
     </>
   );
