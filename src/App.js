@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "./styles.module.css";
 
 function BtcInfo() {
   const [infoLoading, setInfoLoading] = useState(true);
@@ -36,8 +37,26 @@ function BtcInfo() {
   );
 }
 
+function Title() {
+  return <h1 className={styles.title}>Crypto Dashboard</h1>;
+}
+
+function Tabs() {
+  return <div className="tabs">Tabs</div>;
+}
+
+function Display() {
+  return <div className="display">Display</div>;
+}
+
 function App() {
-  return <BtcInfo />;
+  return (
+    <div className={styles.layout}>
+      <Title />
+      <Tabs />
+      <Display />
+    </div>
+  );
 }
 
 export default App;
