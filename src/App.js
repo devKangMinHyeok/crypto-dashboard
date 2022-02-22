@@ -1,33 +1,28 @@
 import { useState } from "react";
 
-function Hello() {
-  const [number, setNumber] = useState(0);
-  let number2 = 0;
+function BtcInfo() {
+  const [counter, setCounter] = useState(0);
+  fetch("https://api.coinpaprika.com/v1/tickers/btc-bitcoin")
+    .then((res) => {
+      console.log(res);
+      return res.json();
+    })
+    .then((data) => console.log(data.quotes.USD.ath_price));
+
   const handleChange = (evt) => {
-    setNumber(evt.target.value);
-    number2++;
-    console.log(number2);
+    setCounter(evt.target.value);
   };
+
   return (
     <>
-      <div>{number}</div>
-      <div>{number2}</div>
-      <input type="number" value={number} onChange={handleChange} />
+      <div>{counter}</div>
+      <input type="number" onChange={handleChange} />
     </>
   );
-}
-
-function Title() {
-  return <div>Title</div>;
 }
 
 function App() {
-  return (
-    <>
-      <Title />
-      <Hello />
-    </>
-  );
+  return <BtcInfo />;
 }
 
 export default App;
