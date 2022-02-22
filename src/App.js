@@ -1,22 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function BtcInfo() {
-  const [counter, setCounter] = useState(0);
-  fetch("https://api.coinpaprika.com/v1/tickers/btc-bitcoin")
-    .then((res) => {
-      console.log(res);
-      return res.json();
-    })
-    .then((data) => console.log(data.quotes.USD.ath_price));
-
-  const handleChange = (evt) => {
-    setCounter(evt.target.value);
-  };
-
+  const [infoLoading, setInfoLoading] = useState(true);
+  const [info, setInfo] = useState();
+  useEffect(async () => {
+    const response = await fetch(
+      "https://api.coinpaprika.com/v1/tickers/btc-bitcoin"
+    );
+    const data = await response.json();
+    setInfo(data);
+    setInfoLoading(false);
+  }, []);
   return (
     <>
-      <div>{counter}</div>
-      <input type="number" onChange={handleChange} />
+      <div>{infoLoading ? "Loading" : info.quotes.USD.ath_price}</div>
     </>
   );
 }
