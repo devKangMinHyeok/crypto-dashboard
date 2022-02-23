@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
-import styles from "./styles.module.css";
+import styled from "styled-components";
+
+const DisplayBox = styled.div`
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 200px;
+  padding: 10px;
+  gap: 3px;
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+`;
 
 function BtcInfo() {
   const [infoLoading, setInfoLoading] = useState(true);
@@ -19,7 +30,7 @@ function BtcInfo() {
     setRefresh((prev) => !prev);
   };
   return (
-    <>
+    <DisplayBox>
       {infoLoading ? (
         <div>Loading</div>
       ) : (
@@ -33,29 +44,52 @@ function BtcInfo() {
         </div>
       )}
       <button onClick={handleClick}>Refresh</button>
-    </>
+    </DisplayBox>
   );
 }
 
+const TitleLayout = styled.h1`
+  grid-column: 1 / span 2;
+`;
+
 function Title() {
-  return <h1 className={styles.title}>Crypto Dashboard</h1>;
+  return <TitleLayout>Crypto Dashboard</TitleLayout>;
 }
+
+const TabsLayout = styled.div`
+  border: 1px solid black;
+`;
 
 function Tabs() {
-  return <div className="tabs">Tabs</div>;
+  return <TabsLayout>Tabs</TabsLayout>;
 }
 
+const DisplayLayout = styled.div`
+  border: 1px solid black;
+`;
+
 function Display() {
-  return <div className="display">Display</div>;
+  return (
+    <DisplayLayout>
+      <BtcInfo />
+    </DisplayLayout>
+  );
 }
+
+const Layout = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+  grid-template-rows: 1fr 9fr;
+  gap: 1px;
+`;
 
 function App() {
   return (
-    <div className={styles.layout}>
+    <Layout>
       <Title />
       <Tabs />
       <Display />
-    </div>
+    </Layout>
   );
 }
 
