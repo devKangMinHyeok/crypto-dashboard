@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter, Link, NavLink, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 
 const DisplayBox = styled.div`
@@ -60,37 +61,89 @@ const TabsLayout = styled.div`
   border: 1px solid black;
 `;
 
-function Tabs() {
-  return <TabsLayout>Tabs</TabsLayout>;
-}
-
-const DisplayLayout = styled.div`
-  border: 1px solid black;
+const TabBox = styled.div`
+  font-size: 24px;
+  text-align: center;
+  margin-top: 10px;
+  cursor: pointer;
+  a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
 `;
 
-function Display() {
+const setTabStyle = ({ isActive }) => {
+  return {
+    color: isActive ? "red" : "grey",
+    background: isActive ? "lightgray" : "white",
+  };
+};
+
+function Tabs() {
   return (
-    <DisplayLayout>
-      <BtcInfo />
-    </DisplayLayout>
+    <TabsLayout>
+      <TabBox>
+        <NavLink to="/" style={setTabStyle}>
+          Home
+        </NavLink>
+      </TabBox>
+      <TabBox>
+        <NavLink to="/detail" style={setTabStyle}>
+          Detail
+        </NavLink>
+      </TabBox>
+    </TabsLayout>
   );
 }
 
-const Layout = styled.div`
+function Home() {
+  return <BtcInfo />;
+}
+
+function Detail() {
+  return <div>Detail</div>;
+}
+
+const LayoutBox = styled.div`
   display: grid;
+  height: 90vh;
   grid-template-columns: 1fr 6fr;
   grid-template-rows: 1fr 9fr;
   gap: 1px;
 `;
 
-function App() {
+const DisplayLayout = styled.div`
+  border: 1px solid black;
+`;
+
+function Layout() {
   return (
-    <Layout>
+    <LayoutBox>
       <Title />
       <Tabs />
-      <Display />
-    </Layout>
+      <DisplayLayout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/detail" element={<Detail />} />
+        </Routes>
+      </DisplayLayout>
+    </LayoutBox>
   );
+}
+
+function Router() {
+  return (
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
+  );
+}
+
+function App() {
+  return <Router />;
 }
 
 export default App;
