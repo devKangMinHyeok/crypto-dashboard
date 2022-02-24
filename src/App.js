@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Link, NavLink, Route, Routes } from "react-router-dom";
-import styled from "styled-components";
+import styled, { ThemeContext } from "styled-components";
+import { ThemeProvider } from "styled-components";
 
 const DisplayBox = styled.div`
   border: 1px solid black;
@@ -75,14 +76,14 @@ const TabBox = styled.div`
   }
 `;
 
-const setTabStyle = ({ isActive }) => {
-  return {
-    color: isActive ? "red" : "grey",
-    background: isActive ? "lightgray" : "white",
-  };
-};
-
 function Tabs() {
+  const theme = useContext(ThemeContext);
+  const setTabStyle = ({ isActive }) => {
+    return {
+      color: isActive ? theme.hightLightColor : theme.inActiveColor,
+      background: isActive ? theme.activeTabColor : theme.bgColor,
+    };
+  };
   return (
     <TabsLayout>
       <TabBox>
@@ -113,24 +114,36 @@ const LayoutBox = styled.div`
   grid-template-columns: 1fr 6fr;
   grid-template-rows: 1fr 9fr;
   gap: 1px;
+  color: ${({ theme }) => theme.textColor};
+  background-color: ${({ theme }) => theme.bgColor};
 `;
 
 const DisplayLayout = styled.div`
   border: 1px solid black;
 `;
 
+const theme = {
+  textColor: "black",
+  bgColor: "whitesmoke",
+  hightLightColor: "green",
+  inActiveColor: "grey",
+  activeTabColor: "lightgrey",
+};
+
 function Layout() {
   return (
-    <LayoutBox>
-      <Title />
-      <Tabs />
-      <DisplayLayout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/detail" element={<Detail />} />
-        </Routes>
-      </DisplayLayout>
-    </LayoutBox>
+    <ThemeProvider theme={theme}>
+      <LayoutBox>
+        <Title />
+        <Tabs />
+        <DisplayLayout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/detail" element={<Detail />} />
+          </Routes>
+        </DisplayLayout>
+      </LayoutBox>
+    </ThemeProvider>
   );
 }
 
