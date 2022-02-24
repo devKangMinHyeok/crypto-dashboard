@@ -4,14 +4,13 @@ import styled, { ThemeContext } from "styled-components";
 import { ThemeProvider } from "styled-components";
 
 const DisplayBox = styled.div`
-  border: 1px solid black;
   border-radius: 5px;
   width: 200px;
   padding: 10px;
   gap: 3px;
   display: flex;
   flex-direction: column;
-  background-color: whitesmoke;
+  background-color: ${({ theme }) => theme.boxBgColor};
 `;
 
 function BtcInfo() {
@@ -59,7 +58,7 @@ function Title() {
 }
 
 const TabsLayout = styled.div`
-  border: 1px solid black;
+  background-color: ${({ theme }) => theme.tabBgColor};
 `;
 
 const TabBox = styled.div`
@@ -81,7 +80,7 @@ function Tabs() {
   const setTabStyle = ({ isActive }) => {
     return {
       color: isActive ? theme.hightLightColor : theme.inActiveColor,
-      background: isActive ? theme.activeTabColor : theme.bgColor,
+      background: isActive ? theme.activeTabColor : theme.tabBgColor,
     };
   };
   return (
@@ -119,15 +118,18 @@ const LayoutBox = styled.div`
 `;
 
 const DisplayLayout = styled.div`
-  border: 1px solid black;
+  background-color: ${({ theme }) => theme.displayBgColor};
 `;
 
 const theme = {
-  textColor: "black",
-  bgColor: "whitesmoke",
-  hightLightColor: "green",
-  inActiveColor: "grey",
-  activeTabColor: "lightgrey",
+  textColor: "#121212",
+  hightLightColor: "#FFFFFF",
+  inActiveColor: "#121212",
+  activeTabColor: "#121212",
+  bgColor: "#F0F3F8",
+  tabBgColor: "#FFFFFF",
+  boxBgColor: "#FFFFFF",
+  displayBgColor: "#121212",
 };
 
 function Layout() {
