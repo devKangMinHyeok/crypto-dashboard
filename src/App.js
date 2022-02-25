@@ -1,111 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { BrowserRouter, Link, NavLink, Route, Routes } from "react-router-dom";
-import styled, { ThemeContext } from "styled-components";
+import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import styled from "styled-components";
 import { ThemeProvider } from "styled-components";
-
-const DisplayBox = styled.div`
-  border-radius: 5px;
-  width: 200px;
-  padding: 10px;
-  gap: 3px;
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.boxBgColor};
-`;
-
-function BtcInfo() {
-  const [infoLoading, setInfoLoading] = useState(true);
-  const [info, setInfo] = useState();
-  const [refresh, setRefresh] = useState(false);
-  useEffect(async () => {
-    const response = await fetch(
-      "https://api.coinpaprika.com/v1/tickers/btc-bitcoin"
-    );
-    const data = await response.json();
-    setInfo(data);
-    setInfoLoading(false);
-  }, [refresh]);
-  if (info) console.log(info);
-  const handleClick = () => {
-    setInfoLoading(true);
-    setRefresh((prev) => !prev);
-  };
-  return (
-    <DisplayBox>
-      {infoLoading ? (
-        <div>Loading</div>
-      ) : (
-        <div>
-          <div>역대최고가</div>
-          <div>{info.quotes.USD.ath_price}</div>
-          <div>시가총액</div>
-          <div>{info.quotes.USD.market_cap}</div>
-          <div>시가총액 변화율</div>
-          <div>{info.quotes.USD.market_cap_change_24h}</div>
-        </div>
-      )}
-      <button onClick={handleClick}>Refresh</button>
-    </DisplayBox>
-  );
-}
-
-const TitleLayout = styled.h1`
-  grid-column: 1 / span 2;
-`;
-
-function Title() {
-  return <TitleLayout>Crypto Dashboard</TitleLayout>;
-}
-
-const TabsLayout = styled.div`
-  background-color: ${({ theme }) => theme.tabBgColor};
-`;
-
-const TabBox = styled.div`
-  font-size: 24px;
-  text-align: center;
-  margin-top: 10px;
-  cursor: pointer;
-  a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    color: inherit;
-    text-decoration: none;
-  }
-`;
-
-function Tabs() {
-  const theme = useContext(ThemeContext);
-  const setTabStyle = ({ isActive }) => {
-    return {
-      color: isActive ? theme.hightLightColor : theme.inActiveColor,
-      background: isActive ? theme.activeTabColor : theme.tabBgColor,
-    };
-  };
-  return (
-    <TabsLayout>
-      <TabBox>
-        <NavLink to="/" style={setTabStyle}>
-          Home
-        </NavLink>
-      </TabBox>
-      <TabBox>
-        <NavLink to="/detail" style={setTabStyle}>
-          Detail
-        </NavLink>
-      </TabBox>
-    </TabsLayout>
-  );
-}
-
-function Home() {
-  return <BtcInfo />;
-}
-
-function Detail() {
-  return <div>Detail</div>;
-}
+import Detail from "./components/Detail";
+import Home from "./components/Home";
+import Tabs from "./components/Tabs";
+import Title from "./components/Title";
+import { darkTheme, lightTheme } from "./theme";
 
 const LayoutBox = styled.div`
   display: grid;
@@ -121,44 +22,28 @@ const DisplayLayout = styled.div`
   background-color: ${({ theme }) => theme.displayBgColor};
 `;
 
-const theme = {
-  textColor: "#121212",
-  hightLightColor: "#FFFFFF",
-  inActiveColor: "#121212",
-  activeTabColor: "#121212",
-  bgColor: "#F0F3F8",
-  tabBgColor: "#FFFFFF",
-  boxBgColor: "#FFFFFF",
-  displayBgColor: "#121212",
-};
-
 function Layout() {
-  return (
-    <ThemeProvider theme={theme}>
-      <LayoutBox>
-        <Title />
-        <Tabs />
-        <DisplayLayout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/detail" element={<Detail />} />
-          </Routes>
-        </DisplayLayout>
-      </LayoutBox>
-    </ThemeProvider>
-  );
-}
-
-function Router() {
+  const [isLight, setIsLight] = useState(true);
   return (
     <BrowserRouter>
-      <Layout />
+      <ThemeProvider theme={isLight ? lightTheme : darkTheme}>
+        <LayoutBox>
+          <Title />
+          <Tabs isLight={isLight} setIsLight={setIsLight} />
+          <DisplayLayout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/detail" element={<Detail />} />
+            </Routes>
+          </DisplayLayout>
+        </LayoutBox>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
 
 function App() {
-  return <Router />;
+  return <Layout />;
 }
 
 export default App;
