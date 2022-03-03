@@ -23,7 +23,7 @@ function BtcInfo() {
     setInfo(data);
     setInfoLoading(false);
   }, [refresh]);
-  if (info) console.log(info);
+
   const handleClick = () => {
     setInfoLoading(true);
     setRefresh((prev) => !prev);
